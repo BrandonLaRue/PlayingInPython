@@ -1,0 +1,781 @@
+#Problem Set 1 Question 1:
+
+count = 0;
+for char in s:
+    if char == 'a' or char == 'e' or char == 'i' or char == 'o' or char == 'u':
+        count += 1;
+print("Number of vowels: " + count);
+
+#End Q1
+
+--------------------------------------------------------------------------------------------------
+
+#PS 1 Q2:
+
+count = 0;
+
+def cutString(index, s):
+    '''
+    s: string
+    index: index of character to begin new string
+    '''
+    ns = "";
+    for ind in range(index, len(s)):
+        ns += s[ind];
+    return ns;
+    
+while(s.find("bob") != -1):
+    index = s.find("bob");
+    count += 1;
+    s = cutString(s.find("bob") + 1, s);
+    print(s);
+    
+print("Number of times bob occurs is: " + count);
+    
+#End Q2
+
+-------------------------------------------------------------------------------
+#PS 1 Q3
+'''
+Goal: find the longest substring of alphabetical characters
+'''
+
+#string to be tested:
+s = 'azcbobobegghakl'
+
+
+def isAlpha(x, y, s):
+    '''
+    x: int (First Character Index)
+    y: int (Second Character Index)
+    s: str (String Refrenced by Index Values)    
+    '''
+    
+    alpha = "abcdefghijklmnopqrstuvwxyz";
+    
+    if(alpha.find(s[x]) <= alpha.find(s[y])):
+        return True;
+    else:
+        return False;
+
+
+def genString(s):
+    '''
+    s: The String to be Sequenced
+    
+    This function outputs a binary (t/f) sequence that will show whether the sequence is alphabetical.
+    '''
+    out = ""    
+    for ind in range(0, len(s)-1):
+        
+        if(isAlpha(ind, ind + 1, s)):
+            out += 't';
+        elif(not(isAlpha(ind, ind + 1, s))):
+                out += 'f';
+                
+    return out;
+    
+    
+def findSq (s):
+    '''
+    Uses the output from genString to find alphabetical sequences
+    '''
+    bestIndex = 0;
+    bestLen = 0;
+
+    count = 0;
+    sO = s;
+    s = genString(s) + 'f';
+    for i in range(0, len(s)): 
+        if (s[i] == 't'):
+            count += 1
+        else: 
+            if(count > bestLen):
+                bestLen = count;
+                bestIndex = i - count;
+                count = 0;
+            else:
+                count = 0;
+    bestLen += 1;
+    return(sO[bestIndex : bestIndex + bestLen]);  
+                
+
+print("Longest substring in alphabetical order is: " + findSq(s));
+
+#End Q3
+
+----------------------------------------------------------------------------------
+#PS #2 Q #1
+
+#balance = 4213.0
+#annualInterestRate = 0.2;
+#monthlyPaymentRate = 0.04;
+#amountPaid = 0;
+
+for i in range(0 , 12):
+    print("Month: " + str(i + 1));
+    print("Minimum monthly payment: " + str(round(monthlyPaymentRate * balance, 2)));
+    amountPaid += (monthlyPaymentRate * balance);
+    balance -= (monthlyPaymentRate * balance) ;
+    balance += balance * (annualInterestRate/12);
+    print("Remaining balance: " + str(round(balance, 2)))
+    
+print("Total paid: " + str(round(amountPaid, 2)));
+print("Remaining balance: " + str(round(balance, 2)));
+
+#End Q1
+---------------------------------------------------------------------------------------
+#P2 Q2
+
+#balance = 3926;
+#annualInterestRate = 0.2;
+def calcYear(b, m):
+    for i in range(0 , 12):
+      
+        b -= m;
+        b += b * (annualInterestRate/12);
+    return b;
+    
+monthly = 0
+while(calcYear(balance, monthly) > 0):
+    monthly += 10;
+   
+    
+print("Lowest Payment: " + str(monthly));
+
+#End Q2
+
+------------------------------------------------------------------------------------------
+#P2 Q3
+
+balance = 999999;
+annualInterestRate = 0.18;
+
+def calcYear(b, m):
+    for i in range(0 , 12):
+      
+        b -= m;
+        b += b * (annualInterestRate/12);
+    return b;
+    
+    
+low = balance/12;
+up = (balance * (1 + annualInterestRate / 12)**12) / 12
+
+
+
+while (True):
+    g = (low + up) / 2;
+    b = calcYear(balance, g);
+    if(abs(b) > 0.01):
+        if(b < 0):
+            up = g;
+        elif(b > 0): 
+            low = g;
+    else:
+        print(str(round(g, 2)));
+        break;
+        
+#End Q3
+-------------------------------------------------------------------------------------
+#PS 3 Q1
+
+def radiationExposure(start, stop, step):
+    '''
+    Computes and returns the amount of radiation exposed
+    to between the start and stop times. Calls the 
+    function f (defined for you in the grading script)
+    to obtain the value of the function at any point.
+ 
+    start: integer, the time at which exposure begins
+    stop: integer, the time at which exposure ends
+    step: float, the width of each rectangle. You can assume that
+      the step size will always partition the space evenly.
+
+    returns: float, the amount of radiation exposed to 
+      between start and stop times.
+    '''
+    # FILL IN YOUR CODE HERE...
+
+    def f(x):
+        import math
+        return 10*math.e**(math.log(0.5)/5.27 * x)
+
+    times = (stop - start) / step;
+    num = 0;
+    for i in range(int(times)):
+        num += step * f(start + step * i);
+    return num;
+
+#End Q1
+-------------------------------------------------------------------------------------------------
+#PS 3 Part 1
+def isWordGuessed(secretWord, lettersGuessed):
+    '''
+    secretWord: string, the word the user is guessing
+    lettersGuessed: list, what letters have been guessed so far
+    returns: boolean, True if all the letters of secretWord are in lettersGuessed;
+      False otherwise
+    '''
+    for l in secretWord:
+        if (l in lettersGuessed):
+            "Do Nothing"
+        else: 
+            return False
+    return True;
+
+#End Part 1
+-------------------------------------------------------------------------
+#PS3 Part 2
+
+def getGuessedWord(secretWord, lettersGuessed):
+    '''
+    secretWord: string, the word the user is guessing
+    lettersGuessed: list, what letters have been guessed so far
+    returns: string, comprised of letters and underscores that represents
+      what letters in secretWord have been guessed so far.
+    '''
+
+    ret = '';
+    for l in secretWord:
+        if(l in lettersGuessed):
+            ret += l + ' ';
+        else:
+            ret += "_ "
+    return ret;
+
+#End P2
+-----------------------------------------------------------------------------
+#PS3 Part 3
+def getAvailableLetters(lettersGuessed):
+    '''
+    lettersGuessed: list, what letters have been guessed so far
+    returns: string, comprised of letters that represents what letters have not
+      yet been guessed.
+    '''
+    # FILL IN YOUR CODE HERE...
+    ret = '';
+    alpha = "abcdefghijklmnopqrstuvwxyz";
+    for l in alpha:
+        if(not(l in lettersGuessed)):
+            ret += l;
+    return ret;
+    
+#End P3
+----------------------------------------------------------------------------
+PS 3 P4
+# 6.00 Problem Set 3
+# 
+# Hangman game
+#
+
+# -----------------------------------
+# Helper code
+# You don't need to understand this helper code,
+# but you will have to know how to use the functions
+# (so be sure to read the docstrings!)
+
+import random
+import string
+
+WORDLIST_FILENAME = "C:\Users\Galbatronx\Desktop\Hangman\words.txt"
+
+def loadWords():
+    """
+    Returns a list of valid words. Words are strings of lowercase letters.
+    
+    Depending on the size of the word list, this function may
+    take a while to finish.
+    """
+    print "Loading word list from file..."
+    # inFile: file
+    inFile = open(WORDLIST_FILENAME, 'r', 0)
+    # line: string
+    line = inFile.readline()
+    # wordlist: list of strings
+    wordlist = string.split(line)
+    print "  ", len(wordlist), "words loaded."
+    return wordlist
+
+def chooseWord(wordlist):
+    """
+    wordlist (list): list of words (strings)
+
+    Returns a word from wordlist at random
+    """
+    return random.choice(wordlist)
+
+# end of helper code
+# -----------------------------------
+
+# Load the list of words into the variable wordlist
+# so that it can be accessed from anywhere in the program
+wordlist = loadWords()
+
+def isWordGuessed(secretWord, lettersGuessed):
+    '''
+    secretWord: string, the word the user is guessing
+    lettersGuessed: list, what letters have been guessed so far
+    returns: boolean, True if all the letters of secretWord are in lettersGuessed;
+      False otherwise
+    '''
+    for l in secretWord:
+        if (l in lettersGuessed):
+            "Do Nothing"
+        else: 
+            return False
+    return True;
+
+def getGuessedWord(secretWord, lettersGuessed):
+    '''
+    secretWord: string, the word the user is guessing
+    lettersGuessed: list, what letters have been guessed so far
+    returns: string, comprised of letters and underscores that represents
+      what letters in secretWord have been guessed so far.
+    '''
+
+    ret = '';
+    for l in secretWord:
+        if(l in lettersGuessed):
+            ret += l + ' ';
+        else:
+            ret += "_ "
+    return ret;
+
+
+def getAvailableLetters(lettersGuessed):
+    '''
+    lettersGuessed: list, what letters have been guessed so far
+    returns: string, comprised of letters that represents what letters have not
+      yet been guessed.
+    '''
+    ret = '';
+    alpha = "abcdefghijklmnopqrstuvwxyz";
+    for l in alpha:
+        if(not(l in lettersGuessed)):
+            ret += l;
+    return ret;
+    
+
+    
+
+def hangman(secretWord):
+    '''
+    secretWord: string, the secret word to guess.
+
+    Starts up an interactive game of Hangman.
+
+    * At the start of the game, let the user know how many 
+      letters the secretWord contains.
+
+    * Ask the user to supply one guess (i.e. letter) per round.
+
+    * The user should receive feedback immediately after each guess 
+      about whether their guess appears in the computers word.
+
+    * After each round, you should also display to the user the 
+      partially guessed word so far, as well as letters that the 
+      user has not yet guessed.
+
+    Follows the other limitations detailed in the problem write-up.
+    '''
+    print("Welcome to the game, Hangman!");
+    print("I am thinking of a word that is " + str(len(secretWord)) + " letters long.");
+    
+    guesses = 8;
+    lettersGuessed = [];
+    while(not(isWordGuessed(secretWord, lettersGuessed)) and guesses > 0):
+        print("-------------");
+        print("You have " + str(guesses) + " guesses left");
+        print("Available Letters: " + getAvailableLetters(lettersGuessed));
+        letter = raw_input("Please guess a letter: ");
+        
+        #Test if letter hasd been guessed before
+        if(letter in lettersGuessed):
+            print("Oops! You've already guessed that letter: " + getGuessedWord(secretWord, lettersGuessed));
+        else:
+            lettersGuessed.append(letter);
+            
+            #Deducts chances for incorrect guesses and outputs depending on correct / incorrect
+            if(letter in secretWord):
+                print("Good guess: " + getGuessedWord(secretWord, lettersGuessed));
+            else:
+                print("Oops! That letter is not in my word: " + getGuessedWord(secretWord, lettersGuessed));
+                guesses -= 1;
+            
+    
+    print("-------------");
+    if(isWordGuessed(secretWord, lettersGuessed)):
+        print("Congratulations, you won!");
+    else:
+        print("Sorry, you ran out of guesses. The word was " + secretWord + '.');
+
+
+
+
+# When you've completed your hangman function, uncomment these two lines
+# and run this file to test! (hint: you might want to pick your own
+# secretWord while you're testing)
+
+secretWord = chooseWord(wordlist).lower()
+hangman(secretWord)
+
+#End P4
+-----------------------------------------------------------------------------------------
+# PS 4 P1
+def getWordScore(word, n):
+    """
+    Returns the score for a word. Assumes the word is a valid word.
+
+    The score for a word is the sum of the points for letters in the
+    word, multiplied by the length of the word, PLUS 50 points if all n
+    letters are used on the first turn.
+
+    Letters are scored as in Scrabble; A is worth 1, B is worth 3, C is
+    worth 3, D is worth 2, E is worth 1, and so on (see SCRABBLE_LETTER_VALUES)
+
+    word: string (lowercase letters)
+    n: integer (HAND_SIZE; i.e., hand size required for additional points)
+    returns: int >= 0
+    """
+    # TO DO ... <-- Remove this comment when you code this function
+    
+    score = 0;
+    count = 0;
+    for l in word:
+        score += SCRABBLE_LETTER_VALUES[l];
+        count += 1;
+    score *= len(word);
+    if count == n:
+        score += 50;
+    assert score >= 0;
+    return score;
+
+# End P1
+----------------------------------------------------------------------------------
+#PS 4 P2
+def updateHand(hand, word):
+    """
+    Assumes that 'hand' has all the letters in word.
+    In other words, this assumes that however many times
+    a letter appears in 'word', 'hand' has at least as
+    many of that letter in it. 
+
+    Updates the hand: uses up the letters in the given word
+    and returns the new hand, without those letters in it.
+
+    Has no side effects: does not modify hand.
+
+    word: string
+    hand: dictionary (string -> int)    
+    returns: dictionary (string -> int)
+    """
+    nHand = dict(hand);
+    for c in word:
+        nHand[c] -= 1;
+
+    return nHand;
+
+#End P2
+-----------------------------------------------------------------------------------
+# PS4 P3
+def isValidWord(word, hand, wordList):
+    """
+    Returns True if word is in the wordList and is entirely
+    composed of letters in the hand. Otherwise, returns False.
+
+    Does not mutate hand or wordList.
+   
+    word: string
+    hand: dictionary (string -> int)
+    wordList: list of lowercase strings
+    """
+    #Makes sure word is on word list
+    if (not (word in wordList)):
+        return False;
+    else:
+        nHand = hand.copy();
+
+        #Make Sure all letters in word are in our hand
+        for l in word:
+            if (l in nHand.keys()):
+                pass
+            else: 
+                return False;
+                
+
+        #Edit hand to reflect number of each letter used
+        for l in word:
+            nHand[l] -= 1;
+        #Check that the edited values do not exceed the range of validity
+        for c in nHand:
+            if (nHand[c] < 0):
+                return False;
+              
+        
+        return True;
+#End P3
+-------------------------------------------------------------------------------------------
+#PS4 P4
+def calculateHandlen(hand):
+    """ 
+    Returns the length (number of letters) in the current hand.
+    
+    hand: dictionary (string-> int)
+    returns: integer
+    """
+    num = 0;
+    for l in hand:
+        num += hand[l];
+    return num;
+#End P4
+--------------------------------------------------------------------------------------------------
+#PS4 P5
+def playHand(hand, wordList, n):
+    """
+    Allows the user to play the given hand, as follows:
+
+    * The hand is displayed.
+    * The user may input a word or a single period (the string ".") 
+      to indicate they're done playing
+    * Invalid words are rejected, and a message is displayed asking
+      the user to choose another word until they enter a valid word or "."
+    * When a valid word is entered, it uses up letters from the hand.
+    * After every valid word: the score for that word is displayed,
+      the remaining letters in the hand are displayed, and the user
+      is asked to input another word.
+    * The sum of the word scores is displayed when the hand finishes.
+    * The hand finishes when there are no more unused letters or the user
+      inputs a "."
+
+      hand: dictionary (string -> int)
+      wordList: list of lowercase strings
+      n: integer (HAND_SIZE; i.e., hand size required for additional points)
+      
+    """
+    # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
+    # Keep track of the total score
+    
+    # As long as there are still letters left in the hand:
+    pointsEarned = 0;
+    while(calculateHandlen(hand) > 0):
+        # Display the hand
+        displayHand(hand);
+        # Ask user for input
+        inp = raw_input('Enter word, or a "." to indicate that you are finished: ');
+        # If the input is a single period:
+        if(inp == '.'):
+            # End the game (break out of the loop)
+            break;
+            
+        # Otherwise (the input is not a single period):
+        else:
+            # If the word is not valid:
+            if(not (isValidWord(inp, hand, wordList))):
+                # Reject invalid word (print a message followed by a blank line)
+                print("Invalid word, please try again.");
+                print
+            # Otherwise (the word is valid):
+            else:
+                # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
+                pointsEarned += getWordScore(inp, n);
+                print('"' + str(inp) + '"' +  "earned " + str(getWordScore(inp, n)) + " points. Total: " + str(pointsEarned) + " points");
+                print
+                # Update the hand 
+                hand = updateHand(hand, inp);
+
+    # Game is over (user entered a '.' or ran out of letters), so tell user the total score
+    if(calculateHandlen(hand) <= 0):
+        print("Run out of letters. Total score: " + str(pointsEarned) + " points.");
+    else:
+        print("Goodbye! Total score: " + str(pointsEarned) + " points.");
+    print
+
+#End P5
+-----------------------------------------------------------------------------
+#PS4 P6
+def playGame(wordList):
+    """
+    Allow the user to play an arbitrary number of hands.
+
+    1) Asks the user to input 'n' or 'r' or 'e'.
+      * If the user inputs 'n', let the user play a new (random) hand.
+      * If the user inputs 'r', let the user play the last hand again.
+      * If the user inputs 'e', exit the game.
+      * If the user inputs anything else, tell them their input was invalid.
+    
+    2) When done playing the hand, repeat from step 1    
+    """
+    while(True):
+        #Get Input
+        inp = raw_input("Enter n to deal a new hand, r to replay the last hand, or e to end game: ");
+        global bHand;
+        if(inp == 'n'):
+            #Create and Play new random hand
+            bHand = dealHand(HAND_SIZE);
+            playHand(bHand, wordList, HAND_SIZE);
+        elif(inp == 'r'):
+            if(bHand == None):
+                print("You have not played a hand yet. Please play a new hand first!");
+                print
+            else:
+                playHand(bHand, wordList, HAND_SIZE);
+        elif(inp == 'e'):
+            break;
+        else:
+            print("Invalid command.");
+
+#End P6
+------------------------------------------------------------------------------------
+#PS4 P7
+def compChooseWord(hand, wordList, n):
+    """
+    Given a hand and a wordList, find the word that gives 
+    the maximum value score, and return it.
+
+    This word should be calculated by considering all the words
+    in the wordList.
+
+    If no words in the wordList can be made from the hand, return None.
+
+    hand: dictionary (string -> int)
+    wordList: list (string)
+    n: integer (HAND_SIZE; i.e., hand size required for additional points)
+
+    returns: string or None
+    """
+    # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
+    # Create a new variable to store the maximum score seen so far (initially 0)
+    maxScore = 0;
+
+    # Create a new variable to store the best word seen so far (initially None)  
+    bestWord = '';
+    # For each word in the wordList
+    for word in wordList:
+        # If you can construct the word from your hand
+        # (hint: you can use isValidWord, or - since you don't really need to test if the word is in the wordList - you can make a similar function that omits that test)
+        if(isValidWord(word, hand, wordList)):
+            # Find out how much making that word is worth
+            score = getWordScore(word, n);
+            # If the score for that word is higher than your best score
+            if(score > maxScore):
+                # Update your best score, and best word accordingly
+                maxScore = score;
+                bestWord = word;
+
+    # return the best word you found.
+    return bestWord;
+#End P7
+------------------------------------------------------------------------------------
+#PS4 P8 
+def compPlayHand(hand, wordList, n):
+    """
+    Allows the computer to play the given hand, following the same procedure
+    as playHand, except instead of the user choosing a word, the computer 
+    chooses it.
+
+    1) The hand is displayed.
+    2) The computer chooses a word.
+    3) After every valid word: the word and the score for that word is 
+    displayed, the remaining letters in the hand are displayed, and the 
+    computer chooses another word.
+    4)  The sum of the word scores is displayed when the hand finishes.
+    5)  The hand finishes when the computer has exhausted its possible
+    choices (i.e. compChooseWord returns None).
+ 
+    hand: dictionary (string -> int)
+    wordList: list (string)
+    n: integer (HAND_SIZE; i.e., hand size required for additional points)
+    """
+     # Keep track of the total score
+    pointsEarned = 0;
+    # As long as there are still letters left in the hand:
+    while(calculateHandlen(hand) > 0):
+
+        # Display the hand
+        displayHand(hand);
+
+        # Ask user for input
+        inp = compChooseWord(hand, wordList, n);
+
+        if(inp != ''):
+        
+            # Tell the user how many points the word earned, and the updated total score, in one line followed by a blank line
+            pointsEarned += getWordScore(inp, n);
+            print('"' + str(inp) + '"' +  " earned " + str(getWordScore(inp, n)) + " points. Total: " + str(pointsEarned) + " points");
+            print
+            # Update the hand 
+            hand = updateHand(hand, inp);
+        else:
+            print("Total score: " + str(pointsEarned) + " points.");
+            print
+            break;
+#End P8
+--------------------------------------------------------------------------------------------------------
+#PS4 P9
+def playGame(wordList):
+    """
+    Allow the user to play an arbitrary number of hands.
+ 
+    1) Asks the user to input 'n' or 'r' or 'e'.
+        * If the user inputs 'e', immediately exit the game.
+        * If the user inputs anything that's not 'n', 'r', or 'e', keep asking them again.
+
+    2) Asks the user to input a 'u' or a 'c'.
+        * If the user inputs anything that's not 'c' or 'u', keep asking them again.
+
+    3) Switch functionality based on the above choices:
+        * If the user inputted 'n', play a new (random) hand.
+        * Else, if the user inputted 'r', play the last hand again.
+      
+        * If the user inputted 'u', let the user play the game
+          with the selected hand, using playHand.
+        * If the user inputted 'c', let the computer play the 
+          game with the selected hand, using compPlayHand.
+
+    4) After the computer or user has played the hand, repeat from step 1
+
+    wordList: list (string)
+    """
+    while(True):
+        #Get Input
+        inp = raw_input("Enter n to deal a new hand, r to replay the last hand, or e to end game: ");
+        global bHand;
+        if(inp == 'n'):
+            #Create and Play new random hand
+            bHand = dealHand(HAND_SIZE);
+            while(True): 
+                gameMode = raw_input("Enter u to have yourself play, c to have the computer play: ");
+                print
+                if(gameMode == 'u'):
+                    playHand(bHand, wordList, HAND_SIZE);
+                    break;
+                elif(gameMode == 'c'):
+                    compPlayHand(bHand, wordList, HAND_SIZE);
+                    break;
+                else:
+                    print("Invalid command.");     
+           
+        elif(inp == 'r'):
+            if(bHand == None):
+                print("You have not played a hand yet. Please play a new hand first!");
+                print
+            else:
+                while(True): 
+                    gameMode = raw_input("Enter u to have yourself play, c to have the computer play: ");
+                    print
+                    if(gameMode == 'u'):
+                        playHand(bHand, wordList, HAND_SIZE);
+                        break;
+                    elif(gameMode == 'c'):
+                        compPlayHand(bHand, wordList, HAND_SIZE);
+                        break;
+                    else:
+                        print("Invalid command.");     
+                
+        elif(inp == 'e'):
+            break;
+        else:
+            print("Invalid command.");
+#End P9
+----------------------------------------------------------------------------------------------------------
